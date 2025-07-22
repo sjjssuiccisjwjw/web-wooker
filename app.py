@@ -16,10 +16,9 @@ logger = logging.getLogger(__name__)
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'  # <- linha essencial
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False         # <- evita warnings
-
-db = SQLAlchemy(app)  # se já existir no código, não adicione de novo
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
 # Database configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
@@ -856,6 +855,5 @@ def roblox_execution():
         return {"error": "Internal server error"}, 500
 
 if __name__ == "__main__":
-    import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
